@@ -1,9 +1,12 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from 'store/store';
 
 function App() {
   return (
+    <Provider store={store}>
     <div className="App">
       <main className="App-header">
         <BrowserRouter>
@@ -32,6 +35,7 @@ function App() {
         </BrowserRouter>
       </main>
     </div>
+    </Provider>
   );
 }
 

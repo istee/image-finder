@@ -3,35 +3,35 @@ import { ActionTypes } from 'store/actionTypes';
 import { combineReducers } from 'redux';
 
 interface TopicCardState {
-  byId: { [id: string]: TopicCard };
-  allIds: string[];
+    byId: { [id: string]: TopicCard };
+    allIds: string[];
 }
 
 const initialState: TopicCardState = {
-  byId: {},
-  allIds: [],
+    byId: {},
+    allIds: [],
 };
 
 export const topicCardReducer = (
-  state = initialState,
-  action: any
+    state = initialState,
+    action: any
 ): TopicCardState => {
-  switch (action.type) {
-    case ActionTypes.CREATE_CARD: {
-      const card = action.payload;
-      return {
-        ...state,
-        byId: { ...state.byId, [card.id]: card },
-        allIds: [...state.allIds, card.id],
-      };
+    switch (action.type) {
+        case ActionTypes.CREATE_CARD: {
+            const card = action.payload;
+            return {
+                ...state,
+                byId: { ...state.byId, [card.id]: card },
+                allIds: [...state.allIds, card.id],
+            };
+        }
+        default:
+            return state;
     }
-    default:
-      return state;
-  }
 };
 
 const rootReducer = combineReducers({
-  topicCards: topicCardReducer,
+    topicCards: topicCardReducer,
 });
 
 export default rootReducer;

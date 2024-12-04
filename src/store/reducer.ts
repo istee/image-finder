@@ -1,6 +1,7 @@
 import { TopicCard } from 'models/TopicCard';
-import { ActionTypes } from 'store/actionTypes';
+import { ActionTypes } from 'store/topicCards/actionTypes';
 import { combineReducers } from 'redux';
+import { photosReducer } from './photosReducer';
 
 interface TopicCardState {
     byId: { [id: string]: TopicCard };
@@ -32,6 +33,7 @@ export const topicCardReducer = (
 
 const rootReducer = combineReducers({
     topicCards: topicCardReducer,
+    photos: photosReducer,
 });
 
 export default rootReducer;

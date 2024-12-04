@@ -1,6 +1,7 @@
+import { Button } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCard } from 'store/actionCreators';
+import { createCard } from 'store/topicCards/actionCreators';
 import { mockedData } from 'store/mockedData';
 import { RootState } from 'store/store';
 
@@ -12,7 +13,9 @@ export const HomePage = () => {
             <span>HomePage</span>
             <span>{JSON.stringify(topicCards)}</span>
             {topicCards.allIds.length === 0 && (
-                <button
+                <Button
+                    variant="contained"
+                    color="primary"
                     onClick={() =>
                         mockedData.forEach((topicCard) =>
                             dispatch(createCard(topicCard))
@@ -20,7 +23,7 @@ export const HomePage = () => {
                     }
                 >
                     Add some cards
-                </button>
+                </Button>
             )}
         </div>
     );

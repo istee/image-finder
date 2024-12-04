@@ -10,6 +10,8 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import { Link } from 'react-router-dom';
+import { topicCardByIdSelector } from 'store/selectors/topicCardByIdSelector';
+import { useParametricSelector } from 'store/selectors/useParametricSelector';
 
 export interface Props {
     id: string;
@@ -22,9 +24,7 @@ export const UserTopicCard = ({
     hideUserInfo = false,
     hideTopic = false,
 }: Props) => {
-    const topicCard = useSelector(
-        (state: RootState) => state.topicCards.byId[id]
-    );
+    const topicCard = useParametricSelector(topicCardByIdSelector, id);
     const { firstName, surName, topic, image } = topicCard;
     return (
         <Card sx={{ maxWidth: '100%' }}>

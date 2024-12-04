@@ -4,6 +4,9 @@ import { Photo } from 'models/Photo';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPhotosAction, removePhotoAction } from 'store/photosReducer';
+import { firstAvailablePhotoSelector } from 'store/selectors/firstAvailablePhotoSelector';
+import { photoPageSelector } from 'store/selectors/photoPageSelector';
+import { useParametricSelector } from 'store/selectors/useParametricSelector';
 import { RootState } from 'store/store';
 
 interface Props {
@@ -15,10 +18,11 @@ interface Props {
 export const ImageReview = ({ onBackStep, topic, onSubmit }: Props) => {
     const [isFetching, setIsFetching] = useState(false);
     const [isError, setIsError] = useState(false);
-    const firstAvailablePhoto = useSelector(
-        (state: RootState) => state.photos[topic]?.photos?.[0]
+    const firstAvailablePhoto = useParametricSelector(
+        firstAvailablePhotoSelector,
+        topic
     );
-    const page = useSelector((state: RootState) => state.photos[topic]?.page);
+    const page = useParametricSelector(photoPageSelector, topic);
     const dispatch = useDispatch();
 
     useEffect(() => {

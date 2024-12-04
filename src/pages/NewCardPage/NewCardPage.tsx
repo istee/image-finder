@@ -6,9 +6,9 @@ import { PreferredTopicForm } from './PreferredTopicForm';
 import { ImageReview } from './ImageReview';
 import { Photo } from 'models/Photo';
 import { useDispatch } from 'react-redux';
-import { createCard } from 'store/topicCards/actionCreators';
 import { v4 as uuid } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import { createCard } from 'store/topicCards';
 
 const steps = ['Personal Info', 'Preferred Topic', 'Review'];
 

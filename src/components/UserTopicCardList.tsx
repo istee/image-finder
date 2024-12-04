@@ -4,6 +4,7 @@ import { RootState } from 'store/store';
 import { UserTopicCard, Props as UserTopicCardProps } from './UserTopicCard';
 import { Typography, Divider, Grid } from '@mui/material';
 import { Box } from '@mui/system';
+import { useParametricSelector } from 'store/selectors/useParametricSelector';
 
 export interface Props<T extends string | undefined>
     extends Omit<UserTopicCardProps, 'id'> {
@@ -16,7 +17,7 @@ export const UserTopicCardList = <T extends string | undefined>({
     idSelector = (state: RootState) => state.topicCards.allIds,
     ...others
 }: Props<T>) => {
-    const ids = useSelector((state: RootState) => idSelector(state, group));
+    const ids = useParametricSelector(idSelector, group);
     return (
         <Box>
             {group !== undefined && (

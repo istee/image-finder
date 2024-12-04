@@ -1,9 +1,9 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCard } from 'store/topicCards/actionCreators';
 import { mockedData } from 'store/mockedData';
 import { RootState } from 'store/store';
+import { createCard } from 'store/topicCards';
 
 const projectDescription =
     'Image Finder is a React app where users enter their name, surname, and a topic to fetch an image from Unsplash. If the user rejects the image, a new one is fetched; if accepted, a summary card with their details and the image thumbnail is displayed. The app prioritizes simplicity, clean design, and efficient state management.';

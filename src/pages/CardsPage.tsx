@@ -2,7 +2,10 @@ import { Tabs, Tab, Box, Container, Typography } from '@mui/material';
 import { GroupedUserTopicCardList } from 'components/GroupedUserTopicCardList';
 import { UserTopicCardList } from 'components/UserTopicCardList';
 import React, { useState } from 'react';
-import { RootState } from 'store/store';
+import { cardsByNameSelector } from 'store/selectors/cardsByNameSelector';
+import { cardsByTopicSelector } from 'store/selectors/cardsByTopicSelector';
+import { uniqueNameSelector } from 'store/selectors/uniqueNameSelector';
+import { uniqueTopicSelector } from 'store/selectors/uniqueTopicSelector';
 
 export const CardsPage = () => {
     const [tabValue, setTabValue] = useState(0);
@@ -34,43 +37,15 @@ export const CardsPage = () => {
                 {tabValue === 1 && (
                     <GroupedUserTopicCardList
                         hideUserInfo
-                        groupSelector={(state: RootState) =>
-                            Array.from(
-                                new Set(
-                                    state.topicCards.allIds.map(
-                                        (id) =>
-                                            `${state.topicCards.byId[id].firstName} ${state.topicCards.byId[id].surName}`
-                                    )
-                                )
-                            )
-                        }
-                        idSelectorByGroup={(state: RootState, group: string) =>
-                            state.topicCards.allIds.filter(
-                                (id) =>
-                                    group ===
-                                    `${state.topicCards.byId[id].firstName} ${state.topicCards.byId[id].surName}`
-                            )
-                        }
+                        groupSelector={uniqueNameSelector}
+                        idSelectorByGroup={cardsByNameSelector}
                     />
                 )}
                 {tabValue === 2 && (
                     <GroupedUserTopicCardList
                         hideTopic
-                        groupSelector={(state: RootState) =>
-                            Array.from(
-                                new Set(
-                                    state.topicCards.allIds.map(
-                                        (id) => state.topicCards.byId[id].topic
-                                    )
-                                )
-                            )
-                        }
-                        idSelectorByGroup={(state: RootState, group: string) =>
-                            state.topicCards.allIds.filter(
-                                (id) =>
-                                    group === state.topicCards.byId[id].topic
-                            )
-                        }
+                        groupSelector={uniqueTopicSelector}
+                        idSelectorByGroup={cardsByTopicSelector}
                     />
                 )}
             </Box>

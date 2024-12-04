@@ -18,7 +18,7 @@ export const UserTopicCardList = <T extends string | undefined>({
 }: Props<T>) => {
     const ids = useSelector((state: RootState) => idSelector(state, group));
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box>
             {group !== undefined && (
                 <>
                     <Typography variant="h6" gutterBottom>
@@ -27,9 +27,9 @@ export const UserTopicCardList = <T extends string | undefined>({
                     <Divider sx={{ marginBottom: 2 }} />
                 </>
             )}
-            <Grid container spacing={1} direction="row" wrap="wrap">
+            <Grid container spacing={4} direction="row" wrap="wrap">
                 {ids.map((id) => (
-                    <Grid key={id} item xs={12} sm={6} md={3} lg={2}>
+                    <Grid key={id} item xs={12} sm={8} md={6} lg={4}>
                         <UserTopicCard id={id} {...others} />
                     </Grid>
                 ))}

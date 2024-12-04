@@ -1,4 +1,4 @@
-import { Button, Grid } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { findImages } from 'apis/imageFinderApi';
 import { Photo } from 'models/Photo';
 import React, { useEffect, useState } from 'react';
@@ -39,66 +39,97 @@ export const ImageReview = ({ onBackStep, topic, onSubmit }: Props) => {
     return (
         <div>
             {isError && (
-                <div>
+                <Box mb={2}>
                     <span>Failed to fetch images</span>
                     <Button
                         onClick={() => setIsError(false)}
                         variant="contained"
                         color="error"
+                        sx={{ ml: 2 }}
                     >
                         Try Again
                     </Button>
-                </div>
+                </Box>
             )}
+
             {firstAvailablePhoto && (
-                <img
-                    src={firstAvailablePhoto.urls.regular}
-                    alt={
-                        firstAvailablePhoto.alt_description ??
-                        `Photo about ${topic}`
-                    }
-                />
-            )}
-            <Grid item xs={4}>
-                <Button
-                    onClick={onBackStep}
-                    variant="contained"
-                    color="secondary"
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    mb={4}
                 >
-                    Back
-                </Button>
+                    <img
+                        src={firstAvailablePhoto.urls.regular}
+                        alt={
+                            firstAvailablePhoto.alt_description ??
+                            `Photo about ${topic}`
+                        }
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto',
+                            maxHeight: '50vh',
+                            objectFit: 'contain',
+                        }}
+                    />
+                </Box>
+            )}
+
+            <Grid container spacing={2} alignItems="space-between">
+                <Grid item xs={12} sm={1}>
+                    <Button
+                        onClick={onBackStep}
+                        variant="contained"
+                        color="secondary"
+                        fullWidth
+                    >
+                        Back
+                    </Button>
+                </Grid>
+
                 {firstAvailablePhoto && (
-                    <>
-                        <Button
-                            onClick={() =>
-                                dispatch(
-                                    removePhotoAction(
-                                        topic,
-                                        firstAvailablePhoto.id
+                    <Grid
+                        item
+                        xs={12}
+                        sm={11}
+                        container
+                        justifyContent="flex-end"
+                        spacing={2}
+                    >
+                        <Grid item>
+                            <Button
+                                onClick={() =>
+                                    dispatch(
+                                        removePhotoAction(
+                                            topic,
+                                            firstAvailablePhoto.id
+                                        )
                                     )
-                                )
-                            }
-                            variant="contained"
-                            color="error"
-                        >
-                            Reject
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                onSubmit(firstAvailablePhoto);
-                                dispatch(
-                                    removePhotoAction(
-                                        topic,
-                                        firstAvailablePhoto.id
-                                    )
-                                );
-                            }}
-                            variant="contained"
-                            color="success"
-                        >
-                            Accept
-                        </Button>
-                    </>
+                                }
+                                variant="contained"
+                                color="error"
+                            >
+                                Reject
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                onClick={() => {
+                                    onSubmit(firstAvailablePhoto);
+                                    dispatch(
+                                        removePhotoAction(
+                                            topic,
+                                            firstAvailablePhoto.id
+                                        )
+                                    );
+                                }}
+                                variant="contained"
+                                color="success"
+                            >
+                                Accept
+                            </Button>
+                        </Grid>
+                    </Grid>
                 )}
             </Grid>
         </div>

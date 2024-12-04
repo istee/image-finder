@@ -1,42 +1,34 @@
-import React, { useState } from 'react';
-import { Form, Field } from 'react-final-form';
-import {
-    Select,
-    MenuItem,
-    Button,
-    Box,
-    Typography,
-    Grid,
-    TextField,
-    Stepper,
-    Step,
-    StepLabel,
-} from '@mui/material';
+import React from 'react';
+import { Form } from 'react-final-form';
+import { MenuItem, Button, Grid } from '@mui/material';
 import { isEmptyOrUndefined } from 'utils/string';
 import { TextField2 } from 'components/form/TextField';
-import { isPredefinedTopic, PredefinedTopic } from 'models/PredefinedTopic';
+import { isPredefinedTopic } from 'models/PredefinedTopic';
 import { TopicCard } from 'models/TopicCard';
-import { PersonalInfoForm } from './PersonalInfoForm';
 
 interface FormData {
     topic: string;
     customTopic: string;
 }
 
+type ErrorData = {
+    [K in keyof FormData]?: string;
+};
+
 const topics = ['Travel', 'Cars', 'Wildlife', 'Technology', 'Other'];
 
 const validate = (values: Partial<FormData>) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const errors: any = {};
-    // if (isEmptyOrUndefined(values.topic)) {
-    //     errors.topic = 'Preferred Topic is required';
-    // } else if (isPredefinedTopic(values.topic)) {
-    //     errors.customTopic = 'required';
-    // }
+    const errors: ErrorData = {};
+    if (isEmptyOrUndefined(values.topic)) {
+        errors.topic = 'Preferred Topic is required';
+    } else if (
+        !isPredefinedTopic(values.topic) &&
+        isEmptyOrUndefined(values.customTopic)
+    ) {
+        errors.customTopic = 'Custom Topic is required';
+    }
     return errors;
 };
-
-const steps = ['Personal Info', 'Preferred Topic', 'Review'];
 
 interface Props {
     onBackStep: () => void;
@@ -78,23 +70,32 @@ export const PreferredTopicForm = ({ onBackStep, onSubmit }: Props) => {
                                 />
                             </Grid>
                         )}
-                        <Grid item xs={4}>
-                            <Button
-                                onClick={onBackStep}
-                                variant="contained"
-                                color="secondary"
-                                disabled={submitting}
-                            >
-                                Back
-                            </Button>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                disabled={submitting}
-                            >
-                                Next
-                            </Button>
+                        <Grid
+                            item
+                            xs={12}
+                            container
+                            justifyContent="space-between"
+                        >
+                            <Grid item>
+                                <Button
+                                    onClick={onBackStep}
+                                    variant="contained"
+                                    color="secondary"
+                                    disabled={submitting}
+                                >
+                                    Back
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={submitting}
+                                >
+                                    Next
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </form>

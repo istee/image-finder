@@ -5,9 +5,14 @@ import { isEmptyOrUndefined } from 'utils/string';
 import { TextField2 } from 'components/form/TextField';
 import { TopicCard } from 'models/TopicCard';
 
-const validate = (values: Pick<TopicCard, 'firstName' | 'surName'>) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const errors: any = {};
+type FormData = Pick<TopicCard, 'firstName' | 'surName'>;
+
+type ErrorData = {
+    [K in keyof FormData]?: string;
+};
+
+const validate = (values: FormData) => {
+    const errors: ErrorData = {};
     if (isEmptyOrUndefined(values.firstName)) {
         errors.firstName = 'Name is required';
     }
@@ -18,12 +23,14 @@ const validate = (values: Pick<TopicCard, 'firstName' | 'surName'>) => {
 };
 
 interface Props {
-    onSubmit: (values: Pick<TopicCard, 'firstName' | 'surName'>) => void;
+    onSubmit: (values: FormData) => void;
+    personalInfo?: FormData;
 }
 
-export const PersonalInfoForm = ({ onSubmit }: Props) => {
+export const PersonalInfoForm = ({ onSubmit, personalInfo }: Props) => {
     return (
         <Form
+            initialValues={personalInfo}
             onSubmit={onSubmit}
             validate={validate}
             render={({ handleSubmit, submitting }) => (
@@ -43,12 +50,11 @@ export const PersonalInfoForm = ({ onSubmit }: Props) => {
                                 placeholder="Enter your surname"
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} container justifyContent="flex-end">
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary"
-                                fullWidth
                                 disabled={submitting}
                             >
                                 Next

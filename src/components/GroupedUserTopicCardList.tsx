@@ -5,6 +5,7 @@ import {
     UserTopicCardList,
     Props as UserTopicCardListProps,
 } from './UserTopicCardList';
+import { Grid } from '@mui/material';
 
 interface Props
     extends Pick<UserTopicCardListProps<string>, 'hideUserInfo' | 'hideTopic'> {
@@ -19,15 +20,16 @@ export const GroupedUserTopicCardList = ({
 }: Props) => {
     const groups = useSelector((state: RootState) => groupSelector(state));
     return (
-        <>
+        <Grid container spacing={4} direction="column">
             {groups.map((group) => (
-                <UserTopicCardList
-                    key={group}
-                    group={group}
-                    idSelector={idSelectorByGroup}
-                    {...others}
-                />
+                <Grid item key={group}>
+                    <UserTopicCardList
+                        group={group}
+                        idSelector={idSelectorByGroup}
+                        {...others}
+                    />
+                </Grid>
             ))}
-        </>
+        </Grid>
     );
 };

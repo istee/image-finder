@@ -27,7 +27,7 @@ export const UserTopicCard = ({
     );
     const { firstName, surName, topic, image } = topicCard;
     return (
-        <Card sx={{ maxWidth: '100%', margin: '1rem' }}>
+        <Card sx={{ maxWidth: '100%' }}>
             <Link to={`/cards/${id}`} style={{ textDecoration: 'none' }}>
                 <CardMedia
                     component="img"

@@ -7,7 +7,7 @@ import { cardsByTopicSelector } from 'store/selectors/cardsByTopicSelector';
 import { uniqueNameSelector } from 'store/selectors/uniqueNameSelector';
 import { uniqueTopicSelector } from 'store/selectors/uniqueTopicSelector';
 
-export const CardsPage = () => {
+const CardsPage = () => {
     const [tabValue, setTabValue] = useState(0);
     const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
@@ -52,3 +52,5 @@ export const CardsPage = () => {
         </Container>
     );
 };
+
+export default CardsPage;

@@ -8,7 +8,7 @@ import { GenerateTopicsRenderProps } from './GenerateTopicsRenderProps';
 const projectDescription =
     'Image Finder is a React application that leverages Material UI for a clean and modern design and Redux for efficient state management. Users can input their name, surname, and a topic to fetch an image from Unsplash. If the user rejects the image, a new one is retrieved; if accepted, a summary card displaying their details and the image thumbnail is created. The app emphasizes simplicity, intuitive design, and seamless functionality.';
 
-export const HomePage = () => {
+const HomePage = () => {
     return (
         <Container maxWidth="lg" sx={{ paddingY: 4 }}>
             <Grid
@@ -53,3 +53,5 @@ export const HomePage = () => {
         </Container>
     );
 };
+
+export default HomePage;

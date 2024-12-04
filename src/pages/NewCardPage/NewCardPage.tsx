@@ -13,7 +13,7 @@ import { createCard } from 'store/topicCards';
 const steps = ['Personal Info', 'Preferred Topic', 'Review'];
 const timeout = 5000;
 
-export const NewCardPage = () => {
+const NewCardPage = () => {
     const dispatch = useDispatch();
     const [newCardId, setNewCardId] = useState<string>();
     const navigate = useNavigate();
@@ -126,3 +126,5 @@ export const NewCardPage = () => {
         </Grid>
     );
 };
+
+export default NewCardPage;

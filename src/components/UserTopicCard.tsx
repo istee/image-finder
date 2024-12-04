@@ -30,12 +30,20 @@ export const UserTopicCard = React.memo(function MemoizedCard({
     return (
         <Card sx={{ maxWidth: '100%' }}>
             <Link to={`/cards/${id}`} style={{ textDecoration: 'none' }}>
-                <CardMedia
-                    component="img"
-                    height="240"
-                    image={image}
-                    alt={topic}
-                />
+                <Box sx={{ position: 'relative', height: 240 }}>
+                    <CardMedia
+                        component="img"
+                        height="240"
+                        image={image}
+                        alt={topic || 'Image'}
+                        loading="lazy"
+                        sx={{
+                            objectFit: 'cover',
+                            display: 'block',
+                            backgroundColor: '#f0f0f0',
+                        }}
+                    />
+                </Box>
                 <CardContent>
                     {!hideUserInfo && (
                         <Typography variant="h5" component="div">

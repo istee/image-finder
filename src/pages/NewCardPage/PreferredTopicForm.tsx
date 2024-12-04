@@ -2,8 +2,8 @@ import React from 'react';
 import { Form } from 'react-final-form';
 import { MenuItem, Button, Grid } from '@mui/material';
 import { isEmptyOrUndefined } from 'utils/string';
-import { TextField2 } from 'components/form/TextField';
-import { isPredefinedTopic } from 'models/PredefinedTopic';
+import { TextField } from 'components/form/TextField';
+import { isPredefinedTopic, PredefinedTopic } from 'models/PredefinedTopic';
 import { TopicCard } from 'models/TopicCard';
 
 interface FormData {
@@ -15,7 +15,7 @@ type ErrorData = {
     [K in keyof FormData]?: string;
 };
 
-const topics = ['Travel', 'Cars', 'Wildlife', 'Technology', 'Other'];
+const topics = [...Object.values(PredefinedTopic), 'Other'];
 
 const validate = (values: Partial<FormData>) => {
     const errors: ErrorData = {};
@@ -36,7 +36,6 @@ interface Props {
 }
 
 export const PreferredTopicForm = ({ onBackStep, onSubmit }: Props) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleSubmitCallback = (values: FormData) => {
         onSubmit({ topic: values.customTopic ?? values.topic });
     };
@@ -49,7 +48,7 @@ export const PreferredTopicForm = ({ onBackStep, onSubmit }: Props) => {
                 <form onSubmit={handleSubmit} noValidate>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <TextField2
+                            <TextField
                                 fieldName="topic"
                                 label="Preferred Topic"
                                 select
@@ -59,11 +58,11 @@ export const PreferredTopicForm = ({ onBackStep, onSubmit }: Props) => {
                                         {topic}
                                     </MenuItem>
                                 ))}
-                            </TextField2>
+                            </TextField>
                         </Grid>
                         {values.topic === 'Other' && (
                             <Grid item xs={12}>
-                                <TextField2
+                                <TextField
                                     fieldName="customTopic"
                                     label="Custom Topic"
                                     placeholder="Enter your custom topic"

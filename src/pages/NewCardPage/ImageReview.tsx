@@ -2,12 +2,11 @@ import { Box, Button, Grid } from '@mui/material';
 import { findImages } from 'apis/imageFinderApi';
 import { Photo } from 'models/Photo';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addPhotosAction, removePhotoAction } from 'store/photosReducer';
 import { firstAvailablePhotoSelector } from 'store/selectors/firstAvailablePhotoSelector';
 import { photoPageSelector } from 'store/selectors/photoPageSelector';
 import { useParametricSelector } from 'store/selectors/useParametricSelector';
-import { RootState } from 'store/store';
 
 interface Props {
     topic: string;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Typography, Grid, Stepper, Step, StepLabel } from '@mui/material';
 import { TopicCard } from 'models/TopicCard';
 import { PersonalInfoForm } from './PersonalInfoForm';
@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { createCard } from 'store/topicCards';
 
 const steps = ['Personal Info', 'Preferred Topic', 'Review'];
+const timeout = 5000;
 
 export const NewCardPage = () => {
     const dispatch = useDispatch();
@@ -22,49 +23,56 @@ export const NewCardPage = () => {
     const [preferredTopic, setPreferredTopic] =
         useState<Pick<TopicCard, 'topic'>>();
 
-    const handleSubmitPersonalInfo = (
-        values: Pick<TopicCard, 'firstName' | 'surName'>
-    ) => {
-        setPersonalInfo(values);
-        setActiveStep(1);
-    };
-
-    const handleSubmitPreferredTopic = (values: Pick<TopicCard, 'topic'>) => {
-        setPreferredTopic(values);
-        setActiveStep(2);
-    };
-
-    const handleSubmitPhoto = (photo: Photo) => {
-        if (!personalInfo) {
-            setActiveStep(0);
-            return;
-        }
-        if (!preferredTopic) {
+    const handleSubmitPersonalInfo = useCallback(
+        (values: Pick<TopicCard, 'firstName' | 'surName'>) => {
+            setPersonalInfo(values);
             setActiveStep(1);
-            return;
-        }
-        const id = uuid();
-        dispatch(
-            createCard({
-                id,
-                ...personalInfo,
-                ...preferredTopic,
-                image: photo.urls.regular,
-            })
-        );
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setNewCardId(id);
-    };
+        },
+        []
+    );
 
-    const handleBackStep = () => {
+    const handleSubmitPreferredTopic = useCallback(
+        (values: Pick<TopicCard, 'topic'>) => {
+            setPreferredTopic(values);
+            setActiveStep(2);
+        },
+        []
+    );
+
+    const handleSubmitPhoto = useCallback(
+        (photo: Photo) => {
+            if (!personalInfo) {
+                setActiveStep(0);
+                return;
+            }
+            if (!preferredTopic) {
+                setActiveStep(1);
+                return;
+            }
+            const id = uuid();
+            dispatch(
+                createCard({
+                    id,
+                    ...personalInfo,
+                    ...preferredTopic,
+                    image: photo.urls.regular,
+                })
+            );
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setNewCardId(id);
+        },
+        [personalInfo, preferredTopic, dispatch]
+    );
+
+    const handleBackStep = useCallback(() => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+    }, []);
 
     useEffect(() => {
         if (newCardId) {
             const timeoutId = setTimeout(
                 () => navigate(`/cards/${newCardId}`),
-                5000
+                timeout
             );
             return () => clearTimeout(timeoutId);
         }
@@ -110,8 +118,7 @@ export const NewCardPage = () => {
                 {newCardId !== undefined && (
                     <Box sx={{ textAlign: 'center', mb: 4 }}>
                         <Typography variant="body1">
-                            Your card has been created. You will be redirected
-                            to the card page in 5 seconds.
+                            {`Your card has been created. You will be redirected to the card page in ${timeout / 1000} seconds.`}
                         </Typography>
                     </Box>
                 )}

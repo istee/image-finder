@@ -1,7 +1,7 @@
-import { createCachedSelector } from 're-reselect';
+import { createSelector } from 'reselect';
 import { RootState } from 'store/store';
 
-export const cardsByNameSelector = createCachedSelector(
+export const cardsByNameSelector = createSelector(
     (state: RootState) => state.topicCards,
     (_: RootState, name: string) => name,
     (topicCards, name) =>
@@ -10,4 +10,4 @@ export const cardsByNameSelector = createCachedSelector(
                 name ===
                 `${topicCards.byId[id].firstName} ${topicCards.byId[id].surName}`
         )
-)((_, name: string) => name);
+);

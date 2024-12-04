@@ -1,10 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import { UserTopicCard, Props as UserTopicCardProps } from './UserTopicCard';
 import { Typography, Divider, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { useParametricSelector } from 'store/selectors/useParametricSelector';
+import { topicCardIdSelector } from 'store/selectors/topicCardIdSelector';
 
 export interface Props<T extends string | undefined>
     extends Omit<UserTopicCardProps, 'id'> {
@@ -14,7 +14,7 @@ export interface Props<T extends string | undefined>
 
 export const UserTopicCardList = <T extends string | undefined>({
     group,
-    idSelector = (state: RootState) => state.topicCards.allIds,
+    idSelector = topicCardIdSelector,
     ...others
 }: Props<T>) => {
     const ids = useParametricSelector(idSelector, group);

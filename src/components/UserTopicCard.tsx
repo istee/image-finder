@@ -7,8 +7,6 @@ import {
     CardMedia,
     Box,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store/store';
 import { Link } from 'react-router-dom';
 import { topicCardByIdSelector } from 'store/selectors/topicCardByIdSelector';
 import { useParametricSelector } from 'store/selectors/useParametricSelector';
@@ -19,12 +17,15 @@ export interface Props {
     hideTopic?: boolean;
 }
 
-export const UserTopicCard = ({
+export const UserTopicCard = React.memo(function MemoizedCard({
     id,
     hideUserInfo = false,
     hideTopic = false,
-}: Props) => {
+}: Props) {
     const topicCard = useParametricSelector(topicCardByIdSelector, id);
+    if (!topicCard) {
+        return null;
+    }
     const { firstName, surName, topic, image } = topicCard;
     return (
         <Card sx={{ maxWidth: '100%' }}>
@@ -50,4 +51,4 @@ export const UserTopicCard = ({
             </Link>
         </Card>
     );
-};
+});

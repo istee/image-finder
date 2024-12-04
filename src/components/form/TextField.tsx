@@ -10,7 +10,7 @@ interface Props {
     children?: React.ReactNode;
 }
 
-export const TextField2 = ({ fieldName, children, ...others }: Props) => {
+export const TextField = ({ fieldName, children, ...others }: Props) => {
     return (
         <Field name={fieldName}>
             {({ input, meta }) => (

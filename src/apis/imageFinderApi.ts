@@ -2,8 +2,6 @@ import { Photo } from 'models/Photo';
 import { createApi } from 'unsplash-js';
 
 const api = createApi({
-    // Don't forget to set your access token here!
-    // See https://unsplash.com/developers
     accessKey: process.env.REACT_APP_UNSPLASH_ACCESS_KEY ?? '',
 });
 
@@ -26,6 +24,7 @@ export const findImages = async (
             onFinish(result.response?.results ?? [], false);
         })
         .catch(() => {
+            console.log('Failed to fetch images');
             onFinish([], true);
         });
 };

@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import { findImages } from 'apis/imageFinderApi';
 import { Photo } from 'models/Photo';
 import React, { useEffect, useState } from 'react';
@@ -56,26 +56,55 @@ export const ImageReview = ({ onBackStep, topic, onSubmit }: Props) => {
             )}
 
             {firstAvailablePhoto && (
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    mb={4}
-                >
-                    <img
-                        src={firstAvailablePhoto.urls.regular}
-                        alt={
-                            firstAvailablePhoto.alt_description ??
-                            `Photo about ${topic}`
-                        }
-                        style={{
-                            maxWidth: '100%',
-                            height: 'auto',
-                            maxHeight: '50vh',
-                            objectFit: 'contain',
+                <>
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        mb={4}
+                    >
+                        <img
+                            src={firstAvailablePhoto.urls.regular}
+                            alt={
+                                firstAvailablePhoto.alt_description ??
+                                `Photo about ${topic}`
+                            }
+                            style={{
+                                maxWidth: '100%',
+                                height: 'auto',
+                                maxHeight: '50vh',
+                                objectFit: 'contain',
+                            }}
+                        />
+                    </Box>
+                    <Box
+                        sx={{
+                            textAlign: 'center',
+                            mt: 1,
+                            fontSize: '0.8rem',
+                            color: 'text.secondary',
                         }}
-                    />
-                </Box>
+                    >
+                        <Typography variant="body2">
+                            Photo by{' '}
+                            <a
+                                href={`https://unsplash.com/@${firstAvailablePhoto.user.username}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {firstAvailablePhoto.user.name}
+                            </a>{' '}
+                            on{' '}
+                            <a
+                                href="https://unsplash.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Unsplash
+                            </a>
+                        </Typography>
+                    </Box>
+                </>
             )}
 
             <Grid container spacing={2} alignItems="space-between">

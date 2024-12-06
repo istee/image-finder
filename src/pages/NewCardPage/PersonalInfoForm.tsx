@@ -38,6 +38,7 @@ export const PersonalInfoForm = ({ onSubmit, personalInfo }: Props) => {
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6}>
                             <TextField
+                                autoFocus
                                 fieldName="firstName"
                                 label="Name"
                                 placeholder="Enter your firstname"

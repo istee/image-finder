@@ -24,6 +24,8 @@ module.exports = {
   rules: {
     'react/prop-types': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'object-shorthand': ['error', 'always'],
+    'jsx-a11y/no-autofocus': 'off',
     'prettier/prettier': [
       'error',
       {

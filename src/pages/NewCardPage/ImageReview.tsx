@@ -1,12 +1,14 @@
-import { Box, Button, Grid, Typography } from '@mui/material';
-import { findImages } from 'apis/imageFinderApi';
+import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
 import { Photo } from 'models/Photo';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addPhotosAction, removePhotoAction } from 'store/photosReducer';
-import { firstAvailablePhotoSelector } from 'store/selectors/firstAvailablePhotoSelector';
-import { photoPageSelector } from 'store/selectors/photoPageSelector';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { fetchPhotos, removePhotoAction } from 'store/photosReducer';
+import { photoStateByTopicSelector } from 'store/selectors/firstAvailablePhotoSelector';
 import { useParametricSelector } from 'store/selectors/useParametricSelector';
+import { RootState } from 'store/store';
+import { PhotoCredit } from './PhotoCredit';
 
 interface Props {
     topic: string;
@@ -15,97 +17,64 @@ interface Props {
 }
 
 export const ImageReview = ({ onBackStep, topic, onSubmit }: Props) => {
-    const [isFetching, setIsFetching] = useState(false);
-    const [isError, setIsError] = useState(false);
-    const firstAvailablePhoto = useParametricSelector(
-        firstAvailablePhotoSelector,
+    const { photo, isLoading, error, page } = useParametricSelector(
+        photoStateByTopicSelector,
         topic
     );
-    const page = useParametricSelector(photoPageSelector, topic);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<ThunkDispatch<RootState, unknown, Action>>();
+
+    const loadPhotos = useCallback(() => {
+        dispatch(fetchPhotos(topic, page + 1));
+    }, [dispatch, page, topic]);
 
     useEffect(() => {
-        if (!firstAvailablePhoto && !isFetching && !isError) {
-            setIsFetching(true);
-            findImages(
-                (photos, isError) => {
-                    dispatch(addPhotosAction(topic, photos));
-                    setIsFetching(false);
-                    setIsError(isError);
-                },
-                topic,
-                page
-            );
+        if (!photo && !isLoading && !error) {
+            loadPhotos();
         }
-    }, [dispatch, firstAvailablePhoto, isError, isFetching, page, topic]);
+    }, [dispatch, error, isLoading, loadPhotos, page, photo, topic]);
 
     return (
-        <div>
-            {isError && (
-                <Box mb={2}>
-                    <span>Failed to fetch images</span>
-                    <Button
-                        onClick={() => setIsError(false)}
-                        variant="contained"
-                        color="error"
-                        sx={{ ml: 2 }}
-                    >
-                        Try Again
-                    </Button>
-                </Box>
-            )}
-
-            {firstAvailablePhoto && (
-                <>
-                    <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        mb={4}
-                    >
+        <Box gap={4} padding={2}>
+            <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                height="50vh"
+                overflow={'hidden'}
+                gap={2}
+            >
+                {error && (
+                    <>
+                        <Typography variant="body1">{error}</Typography>
+                        <Button
+                            onClick={loadPhotos}
+                            variant="contained"
+                            color="error"
+                            sx={{ ml: 2 }}
+                        >
+                            Try Again
+                        </Button>
+                    </>
+                )}
+                {photo && (
+                    <>
                         <img
-                            src={firstAvailablePhoto.urls.regular}
+                            src={photo.urls.regular}
                             alt={
-                                firstAvailablePhoto.alt_description ??
-                                `Photo about ${topic}`
+                                photo.alt_description ?? `Photo about ${topic}`
                             }
                             style={{
-                                maxWidth: '100%',
-                                height: 'auto',
-                                maxHeight: '50vh',
-                                objectFit: 'contain',
+                                width: 'auto',
+                                maxHeight: 'calc(100% - 6em)',
+                                objectFit: 'cover',
                             }}
                         />
-                    </Box>
-                    <Box
-                        sx={{
-                            textAlign: 'center',
-                            mt: 1,
-                            fontSize: '0.8rem',
-                            color: 'text.secondary',
-                        }}
-                    >
-                        <Typography variant="body2">
-                            Photo by{' '}
-                            <a
-                                href={`https://unsplash.com/@${firstAvailablePhoto.user.username}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {firstAvailablePhoto.user.name}
-                            </a>{' '}
-                            on{' '}
-                            <a
-                                href="https://unsplash.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Unsplash
-                            </a>
-                        </Typography>
-                    </Box>
-                </>
-            )}
+                        <PhotoCredit photo={photo} />
+                    </>
+                )}
+                {isLoading && <CircularProgress />}
+            </Box>
 
             <Grid container spacing={2} alignItems="space-between">
                 <Grid item xs={12} sm={1}>
@@ -119,7 +88,7 @@ export const ImageReview = ({ onBackStep, topic, onSubmit }: Props) => {
                     </Button>
                 </Grid>
 
-                {firstAvailablePhoto && (
+                {photo && (
                     <Grid
                         item
                         xs={12}
@@ -131,12 +100,7 @@ export const ImageReview = ({ onBackStep, topic, onSubmit }: Props) => {
                         <Grid item>
                             <Button
                                 onClick={() =>
-                                    dispatch(
-                                        removePhotoAction(
-                                            topic,
-                                            firstAvailablePhoto.id
-                                        )
-                                    )
+                                    dispatch(removePhotoAction(topic, photo.id))
                                 }
                                 variant="contained"
                                 color="error"
@@ -147,12 +111,9 @@ export const ImageReview = ({ onBackStep, topic, onSubmit }: Props) => {
                         <Grid item>
                             <Button
                                 onClick={() => {
-                                    onSubmit(firstAvailablePhoto);
+                                    onSubmit(photo);
                                     dispatch(
-                                        removePhotoAction(
-                                            topic,
-                                            firstAvailablePhoto.id
-                                        )
+                                        removePhotoAction(topic, photo.id)
                                     );
                                 }}
                                 variant="contained"
@@ -164,6 +125,6 @@ export const ImageReview = ({ onBackStep, topic, onSubmit }: Props) => {
                     </Grid>
                 )}
             </Grid>
-        </div>
+        </Box>
     );
 };
